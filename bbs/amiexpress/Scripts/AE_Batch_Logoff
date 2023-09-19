@@ -1,0 +1,33 @@
+.key Node
+.bra {
+.ket }
+
+Failat 21
+
+IF {Node} EQ 0
+  Delete >NIL: ENV:Ul-logoff.0
+  Delete T:UlMover_0
+  Skip UpdateBulletins
+ELSE
+  IF {Node} EQ 1
+    Delete >NIL: ENV:Ul-logoff.1
+    Delete T:UlMover_1
+    BBS:Utils/Samilog -U"1" -O"BULLETINS:LastCall.txt"15
+    BBS:Utils/Samilog -W"BULLETINS:WeeklyCall.txt"
+    Skip UpdateBulletins
+ENDIF
+
+LAB UpdateBulletins
+S:AEClean > BBS:Screens/Node/User.txt 60 warn mess
+BBS:Utils/Today-Up "CONFS:" "Conf_02/Dir1" "BULLETINS:Conf_02.txt"
+BBS:Utils/Today-Up "CONFS:" "Conf_03/Dir3" "BULLETINS:Conf_03.txt"
+BBS:Utils/Today-Up "CONFS:" "Conf_04/Dir1" "BULLETINS:Conf_04.txt"
+BBS:Utils/Today-Up "CONFS:" "Conf_05/Dir1" "BULLETINS:Conf_05.txt"
+BBS:Utils/MultiTop BBS:Designs/MTopULFiles2.dsg BULLETINS:TopULFiles.txt BBS:User.data
+BBS:Utils/MultiTop BBS:Designs/MTopULBytes4.dsg BULLETINS:TopULBytes.txt BBS:User.data
+DOORS:Oops/Monthtop/MonthTop 1 nosysop
+
+LAB CleanUp
+Delete >NIL: T:#?
+MemClear >NIL: FLUSH
+EndCLI >NIL:

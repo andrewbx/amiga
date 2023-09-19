@@ -1,0 +1,6 @@
+.key Node
+.bra {
+.ket }
+
+Run >NIL: Execute >NIL: BBS:Scripts/AE_Batch_Logoff {node}
+EndCLI >NIL:

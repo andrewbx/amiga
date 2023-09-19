@@ -1,0 +1,43 @@
+.key Option
+.bra {
+.ket }
+
+Failat 21
+
+IF "{Option}" EQ ""
+  Skip CleanUp
+ENDIF
+
+IF {Option} EQ 0
+  Skip Initialise
+ELSE
+  IF {Option} EQ 1
+    Skip ShutDown
+  ELSE
+    Skip CleanUp
+ENDIF
+
+LAB Initialise
+  Copy DOORS:FileDescription/* RAM:FileDescription QUIET
+  Copy DOORS:RubberStamp/* RAM:RubberStamp QUIET
+  Copy DOORS:V-Tools/V-ULMover/* RAM:V-ULMover QUIET
+  Copy DOORS:AquaQuick/* RAM:AquaQuick QUIET
+  Delete RAM:FileDescription/FileDescription.doc QUIET
+  Delete RAM:RubberStamp/RubberStamp.doc QUIET
+  Delete RAM:V-ULMover/V-ULMover.doc QUIET
+  Delete RAM:AquaQuick/AquaQuick.Prompt.Old QUIET
+  RESIDENT BBS:C/Mapus PURE
+  Skip AE_End
+
+LAB ShutDown
+  RESIDENT BBS:C/Mapus REMOVE
+  Delete RAM:FileDescription/ ALL QUIET
+  Delete RAM:RubberStamp/ ALL QUIET
+  Delete RAM:V-ULMover/ ALL QUIET
+  Delete RAM:AquaQuick/ ALL QUIET
+
+LAB CleanUp
+  MemClear >NIL: FLUSH
+  EndCLI >NIL:
+  
+LAB AE_End

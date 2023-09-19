@@ -1,0 +1,50 @@
+.key ConfDir
+.bra {
+.ket }
+
+Failat 21
+
+IF "{ConfDir}" EQ ""
+  Skip Template
+ENDIF
+  
+IF EXISTS {ConfDir}Conf_01/
+  Skip CleanUpMsgs
+ELSE
+  Skip DirNotFound
+ENDIF
+
+LAB CleanUPMsgs
+  Delete {ConfDir}Conf_01/MsgBase/*
+  Delete {ConfDir}Conf_01/*.old
+  Delete {ConfDir}Conf_02/MsgBase/*
+  Delete {ConfDir}Conf_02/*.old
+  Delete {ConfDir}Conf_03/MsgBase/*
+  Delete {ConfDir}Conf_03/*.old
+  Delete {ConfDir}Conf_04/MsgBase/*
+  Delete {ConfDir}Conf_04/*.old
+  Delete {ConfDir}Conf_05/MsgBase/*
+  Delete {ConfDir}Conf_05/*.old
+  Delete {ConfDir}Conf_06/MsgBase/*
+  Delete {ConfDir}Conf_06/*.old
+  Delete {ConfDir}Conf_07/MsgBase/*
+  Delete {ConfDir}Conf_07/*.old
+  Delete {ConfDir}Conf_08/MsgBase/*
+  Delete {ConfDir}Conf_08/*.old
+  Echo ""
+  Echo "Conferences in [2m{ConfDir}[0m Cleaned Up Successfully!"
+  Echo ""
+  Skip StripDone
+  
+LAB DirNotFound
+  Echo ""
+  Echo "[3mERROR![0m - NO Conferences Exist in Directory or Assign [2m{ConfDir}[0m!"
+  Echo ""
+  Skip StripDone
+  
+LAB Template
+  Echo ""
+  Echo "[3mUsage[0m :- StripMsgs <Conference Directory>"
+  Echo ""
+
+LAB StripDone

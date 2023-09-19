@@ -1,0 +1,36 @@
+.key Node
+.bra {
+.ket }
+
+Failat 21
+
+IF "{Node}" EQ ""
+  Skip Template
+ENDIF
+  
+IF EXISTS BBS:Node{Node}
+  Skip CleanUpNode
+ELSE
+  Skip DirNotFound
+ENDIF
+
+LAB CleanUPNode
+  C:Strip BBS:Node{Node}/callerslog 1000
+  C:Strip BBS:Node{Node}/doorlog 1000
+  C:Strip BBS:Node{Node}/startuplog 1000
+  C:Strip BBS:Node{Node}/udlog 1000
+  Echo "[2mNode {Node}[0m Clean-Up Successfull!"
+  Echo ""
+  Skip StripDone
+  
+LAB DirNotFound
+  Echo ""
+  Echo "[3mERROR![0m - The Directory [2mBBS:Node{Node}/[0m Does Not Exist!"
+  Skip StripDone
+  
+LAB Template
+  Echo ""
+  Echo "[3mUsage[0m :- StripNode <Node Number>"
+  Echo ""
+
+LAB StripDone
