@@ -1,0 +1,78 @@
+; $VER: Startup-Sequence_HardDrive 40.2 (25.2.93)
+; AMIGA Startup-Sequence for hard drive systems
+; Modified Version (Andrew)
+;
+failat 21
+;
+;c:prepareemul a1200 >nil:
+;c:loadide >nil:
+c:shutup -Q
+c:quantum >nil: 1
+;
+c:Version >NIL: exec.library 45 20
+If WARN
+  c:SetPatch QUIET
+EndIf
+c:mountenv
+;
+c:startupcontrol
+c:patchcontrol
+c:addbuffers >nil: df0: 25
+c:addbuffers >nil: dh0: 25
+;
+resident c:assign pure
+resident c:execute pure
+;
+makedir ram:t ram:clipboards
+assign t: ram:t
+assign clips: ram:clipboards
+;
+;c:syspic s:bootpics/startup_d.iff SO NF Clock 302/380/1/Chicago.font/13
+;
+assign rexx: sys:scripts/rexx
+assign printers: devs:printers
+assign keymaps: devs:keymaps
+assign locale: sys:locale
+assign libs: sys:classes add
+assign help: locale:help defer
+assign raw: dismount
+;
+;run >nil: c:hypercache -DEVICE=scsi.device -UNIT=0 -NUM_LINES=16 -LINE_SIZE=32
+;run >nil: c:hypercache -DEVICE=scsi.device -UNIT=1 -NUM_LINES=16 -LINE_SIZE=32
+;
+binddrivers
+c:mount devs:dosdrivers/~(#?.info)
+;
+IF EXISTS DEVS:Monitors
+  IF EXISTS DEVS:Monitors/VGAOnly
+    DEVS:Monitors/VGAOnly
+  EndIF
+
+  C:List >NIL: DEVS:Monitors/~(#?.info|VGAOnly) TO T:M LFORMAT "DEVS:Monitors/%s"
+  Execute T:M
+  C:Delete >NIL: T:M
+EndIF
+;
+setenv language "english"
+setenv workbench $workbench
+setenv kickstart $kickstart
+unset workbench
+unset kickstart
+;
+c:waitforfadein
+c:adddatatypes refresh quiet
+;c:iprefs
+run >nil: c:visualprefs
+c:fastiprefs W G O
+run >nil: c:fpprefs
+c:conclip
+;
+path >nil: ram: c: sys:utilities sys:rexxc sys:system s: sys:prefs sys:wbstartup sys:tools sys:tools/commodities
+;
+execute s:user-startup
+;
+resident execute remove
+resident assign remove
+;
+loadwb >nil:
+endcli

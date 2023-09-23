@@ -1,0 +1,33 @@
+copy >nil: envarc:sys/def_ram.info ram:disk.info
+;
+assign dopus5: sys:opus5
+assign c: dopus5:c add
+assign comms: dh1:
+assign mui: sys:mui
+assign libs: mui:libs add
+assign sc: dh1:programming/sc
+assign powercache: dh1:moretools/powercache
+assign Picasso96: DH0:Picasso96
+;
+path sys:locale/catalogs add
+path sc:c add
+;
+run >nil: sys:system/rexxmast >nil:
+;
+;**run >nil: rpstart
+;**run >nil: dh1:moretools/executive/executive
+;**run >nil: c:birdie SYS:Prefs/patterns/border/001.ilbm SYS:Prefs/patterns/border/002.ilbm ACTIVEPATTERN
+;
+run >nil: xpkmasterprefs
+;
+c:hdoff >nil: T1=60 T2=60 SET4000
+c:caprefs >nil:
+;
+;activatecrossidefix all
+;BEGIN AmiSSL
+Assign AmiSSL: "SYS:AmiSSL"
+If Exists AmiSSL:Libs
+  Assign LIBS: AmiSSL:Libs ADD
+EndIf
+Path AmiSSL: ADD
+;END AmiSSL
