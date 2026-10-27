@@ -1,33 +1,94 @@
-copy >nil: envarc:sys/def_ram.info ram:disk.info
+IF EXISTS ENVARC:Sys/def_ramdisk.info
+  Copy ENVARC:SYS/def_ramdisk.info RAM:Disk.info >NIL:
+EndIF
 ;
-assign dopus5: sys:opus5
-assign c: dopus5:c add
-assign comms: dh1:
-assign mui: sys:mui
-assign libs: mui:libs add
-assign sc: dh1:programming/sc
-assign powercache: dh1:moretools/powercache
-assign Picasso96: DH0:Picasso96
+Assign >NIL: MUI: SYS:MUI
+Assign >NIL: LIBS: MUI:Libs ADD
+Assign >NIL: SC: Work:Programming/SC
+Assign >NIL: PowerCache: Work:MoreTools/PowerCache
 ;
-path sys:locale/catalogs add
-path sc:c add
+Path SYS:Locale/Catalogs ADD
+Path SC:C ADD
 ;
-run >nil: sys:system/rexxmast >nil:
+Run >NIL: SYS:System/Rexxmast >NIL:
 ;
-;**run >nil: rpstart
-;**run >nil: dh1:moretools/executive/executive
-;**run >nil: c:birdie SYS:Prefs/patterns/border/001.ilbm SYS:Prefs/patterns/border/002.ilbm ACTIVEPATTERN
+Run >NIL: RPStart
+Run >NIL: Work:MoreTools/Executive/Executive
+;Run >NIL: C:Birdie SYS:Prefs/Patterns/Border/001.ilbm SYS:Prefs/Patterns/Border/002.ilbm ACTIVEPATTERN
+;Run >NIL: C:HyperCache -DEVICE=scsi.device -UNIT=0 -NUM_LINES=16 -LINE_SIZE=32
+;Run >NIL: C:HyperCache -DEVICE=scsi.device -UNIT=1 -NUM_LINES=16 -LINE_SIZE=32
+Run >NIL: XPKMasterPrefs
+
+;C:HDOff >NIL: T1=60 T2=60 SET4000
+C:CAPrefs >NIL:
 ;
-run >nil: xpkmasterprefs
-;
-c:hdoff >nil: T1=60 T2=60 SET4000
-c:caprefs >nil:
-;
-;activatecrossidefix all
+;BEGIN ODFS
+C:DiskChange CD0: >NIL:
+;C:DiskChange CD1: >NIL:
+;END ODFS
+
+;BEGIN Picasso96
+Assign >NIL: Picasso96: SYS:Tools/Picasso96
+;END Picasso96
+
+;BEGIN AmiTCP/IP 3.0b2
+;Assign >NIL: AmiTCP: SYS:Networking/AmiTCP_3
+;Assign >NIL: LIBS: AmiTCP:Libs ADD
+;Path AmiTCP:bin ADD
+;AmiTCP:bin/umask 022
+;FailAt 21
+;Run <>NIL: Execute AmiTCP:bin/startnet
+;FailAt 20
+;END AmiTCP/IP
+
 ;BEGIN AmiSSL
-Assign AmiSSL: "SYS:AmiSSL"
+Assign >NIL: AmiSSL: System:Networking/AmiSSL
 If Exists AmiSSL:Libs
   Assign LIBS: AmiSSL:Libs ADD
-EndIf
+EndIF
 Path AmiSSL: ADD
 ;END AmiSSL
+
+;BEGIN AmiTCP_NG
+;Assign >NIL: AmiTCP: SYS:Networking/AmiTCP_NG
+;Assign >NIL: LIBS: AmiTCP:Libs ADD
+;Path AmiTCP:C ADD
+;IF EXISTS S:Network-Startup
+;  Run >NIL: <NIL: Execute S:Network-Startup
+;EndIF
+
+;IF EXISTS C:GetNetStatus
+;  Run >NIL: <NIL: AmiTCP:C/GetNetStatus >NIL:
+;EndIF
+;END AmiTCP_NG
+
+;BEGIN WHDLoad
+IF EXISTS Work:WHDLoad
+Assign >NIL: C: Work:WHDLoad/C ADD
+Path >NIL: Work:WHDLoad/C ADD
+EndIF
+;END WHDLoad
+
+;BEGIN DOpus5
+Assign >NIL: DOpus5: SYS:DOpus5
+Assign >NIL: C: SYS:Dopus5/C ADD
+Path DOpus5:C ADD
+Resident LoadWB DOpus5:C/LoadDB PURE
+;END DOpus5
+
+;BEGIN AmiNetXDuo
+Assign >NIL: AmiNetXDuo: SYS:Networking/AmiNetXDuo
+Assign >NIL: AmiTCP: AmiNetXDuo:
+Assign >NIL: LIBS: AmiNetXDuo:Libs ADD
+Assign >NIL: C: AmiNetXDuo:C ADD
+Assign >NIL: DEVS: AmiNetXDuo:Devs ADD
+
+IF EXISTS S:Network-Startup
+  Run >NIL: <NIL: Execute S:Network-Startup
+EndIF
+;END AmiNetXDuo
+
+;BEGIN AmiNFSv3
+Assign >NIL: C: SYS:Networking/AmiNFSv3/C ADD
+Assign >NIL: L: SYS:Networking/AmiNFSv3/L ADD
+;END AmiNFSv3

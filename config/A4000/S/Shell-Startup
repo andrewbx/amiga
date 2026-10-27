@@ -1,0 +1,9 @@
+Alias Reverse "Echo *"*E[>1m*E[32;41m*E[0;0H*E[J*""
+Alias Normal "Echo *"*E[>0m*E[32;40m*E[0;0H*E[J*""
+Alias Logout EndShell
+Alias Ls ls -nk
+CLS
+STACK 32768
+CD SYS:
+Path >NIL C: SYS:Tools Work:MoreTools/Executive
+Prompt "[%n] %s> "

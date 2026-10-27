@@ -1,0 +1,36 @@
+; AmiTCP_NG. Copyright (C) 2026 Andy Taylor (MW0MWZ). GPL v2.
+; $VER: Network-Startup 1.0 (AmiTCP_NG)
+;
+; Bring up every network interface configured under DEVS:NetInterfaces/. Each
+; file there describes one interface (see the examples in SYS:Storage/NetInterfaces).
+; This runs from S:User-Startup so the network is up by the time Workbench opens.
+;
+; The pattern ~(#?.info) matches every file EXCEPT Workbench .info icons.
+FailAt 30
+AddNetInterface DEVS:NetInterfaces/~(#?.info)
+Version uaehf.device >NIL:
+IF WARN
+  ; BlueSCSI Dayna takes a minute and fails the first time
+  Echo "Physical Amiga box detected. Ensure Activation of hardware interface..."
+  Wait 2
+  AddNetInterface DEVS:NetInterfaces/~(#?.info)
+;ENDIF
+
+; Set the clock from the network. Many Amigas have no working battery clock and
+; boot with a meaningless date, which quietly breaks file timestamps and anything
+; comparing them. Failure here must never hold up the network, so it is run
+; detached and its output goes to a log rather than the boot screen.
+;
+; Comment this out if you keep time some other way, or change the server -- a
+; local router usually answers NTP and is faster than pool.ntp.org.
+Run >NIL: sntp uk.pool.ntp.org >RAM:sntp.log
+
+; Run Standalone Telnet Daemon (Disabled in favour of SSHD)
+;IF EXISTS S:TelnetD-Launcher
+;  Run >NIL: S:TelnetD-Launcher
+;EndIF
+
+; Run Standalone SSH Daemon
+IF EXISTS S:SSHD-Launcher
+  Run >NIL: S:SSHD-Launcher
+EndIF
