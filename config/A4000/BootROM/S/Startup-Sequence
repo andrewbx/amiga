@@ -1,0 +1,13 @@
+C:LoadModule BR0:Devs/scsi.device
+
+FailAt 21
+Makedir >NIL: RAM:S
+Copy >NIL: SYS:S/AmigaBootSelector ALL RAM:S/AmigaBootSelector
+Copy >NIL: SYS:S/ABS RAM:S
+Assign >NIL: S: RAM:S
+Assign >NIL: SYS: RAM:
+cd RAM:S
+ABS
+Execute >NIL: RAM:S/AmigaBootSelector/Boot.ABS
+Delete >NIL: RAM:S ALL
+EndCLI >NIL:

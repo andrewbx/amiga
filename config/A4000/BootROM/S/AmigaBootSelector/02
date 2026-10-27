@@ -1,0 +1,23 @@
+FailAt 21
+
+;Mount Boot Volume
+Makedir >NIL: RAM:ENV
+Assign >NIL: ENV: RAM:ENV
+C:Mount >NIL: BR0:Storage/DOSDrivers/SDH0
+Assign >NIL: ENV: REMOVE
+Delete >NIL: RAM:ENV ALL
+
+;Assign Default SYS Label
+Assign >NIL: SYS: SDH0:
+
+;Setup Workbench Defaults
+Assign >NIL: C: SYS:C
+Assign >NIL: S: SYS:S
+Assign >NIL: LIBS: SYS:Libs
+Assign >NIL: DEVS: SYS:Devs
+Assign >NIL: FONTS: SYS:Fonts
+Assign >NIL: L: SYS:L
+
+cd SYS:
+Execute >NIL: S:Startup-Sequence
+
