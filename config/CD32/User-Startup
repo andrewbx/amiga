@@ -1,0 +1,42 @@
+; User-Startup for Workbench 3.1 Systems
+
+;BEGIN Workbench Fixes
+;Stop floppy drives from annoying click noises
+IF EXISTS C:AntiClick
+  Run >NIL: <NIL: C:AntiClick >NIL:
+EndIF
+
+;Remove workbench overscan borders
+IF EXISTS C:BorderBlank
+  Run >NIL: <NIL: C:BorderBlank >NIL:
+EndIF
+
+Assign >NIL: Workbench: SYS:
+;END Workbench Fixes
+
+;BEGIN AmiTCP_NG
+Assign >NIL: AmiTCP: System:Networking/AmiTCP
+path AmiTCP:bin add
+
+IF EXISTS S:Network-Startup
+;  Run >NIL: <NIL: Execute S:Network-Startup
+EndIF
+
+IF EXISTS C:GetNetStatus
+;  Run >NIL: <NIL: C:GetNetStatus >NIL:
+EndIF
+;END AmiTCP_NG
+
+;BEGIN AmiSSL
+Assign >NIL: AmiSSL: System:Networking/AmiSSL
+
+IF Exists AmiSSL:Libs
+  Assign >NIL: LIBS: AmiSSL:Libs ADD
+EndIF
+
+Path AmiSSL: ADD
+;END AmiSSL
+
+;BEGIN Miami
+Assign >NIL: Miami: System:Networking/Miami
+;END Miami
